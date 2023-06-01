@@ -96,7 +96,7 @@ def send_email(found_game, found_list):
     if found_game == 1:
         email_sender = 'seanbeanli@gmail.com'
         # email_password = os.getenv('python_gmail_password')
-        email_password = 'tuxpemclzbzwcpnl'
+        email_password = os.environ["GMAIL_PWD"]
         email_receiver = 'seanbeanli@gmail.com'
         smtp_server = 'smtp.gmail.com'
         port = 465
