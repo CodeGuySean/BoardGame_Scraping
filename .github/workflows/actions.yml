@@ -2,7 +2,7 @@ name: run zatu.py
 
 on:
   schedule:
-    - cron: '40 22 * * *' # At 00:00 on Monday
+    - cron: '*/10 * * * *' # At 00:00 on Monday
 
 jobs:
   build:
