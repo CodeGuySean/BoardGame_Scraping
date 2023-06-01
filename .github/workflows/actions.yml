@@ -24,7 +24,7 @@ jobs:
           
       - name: execute py script # run main.py
         env:
-          SOME_SECRET: ${{ secrets.SOME_SECRET }}
+          GMAIL_PWD: ${{ secrets.GMAIL_PWD }}
         run: python zatu.py
           
       # - name: commit files
