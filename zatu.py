@@ -102,7 +102,6 @@ def send_email(found_game, found_list):
         smtp_server = 'smtp.gmail.com'
         port = 465
 
-        myList = [("Mary", "Female"), ("Peter", "Male")]
         items = ["\nID: {id}\nName: {name}\nPrice: {price}\nRRP: {rrp}\nLink: {link}\n\n".format(id = found_list_game[0], name = found_list_game[1], price = found_list_game[2], rrp = found_list_game[3], link = found_list_game[4]) for found_list_game in found_list]
         items = "".join(items)
 
