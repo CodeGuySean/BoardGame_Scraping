@@ -19,7 +19,7 @@ def scrape_games(base_url):
     page = 1
     last_page = 0
     found_game = 0
-    counter = 0
+    # counter = 0
     found_list = []
     while int(page) > int(last_page):
         url = "?page="
@@ -58,9 +58,9 @@ def scrape_games(base_url):
         page = next_btn[-1].find("a")["data-page"] if next_btn else None
         # print(page)
         sleep(5)
-        counter += 1
-        if counter == 3:
-            break
+        # counter += 1
+        # if counter == 3:
+        #     break
 
     # print(found_list)
     # print(all_games)
@@ -96,8 +96,8 @@ def find_wish_game(wish_list, game):
 def send_email(found_game, found_list, base_url):
     if found_game == 1 and base_url == "https://www.board-game.co.uk/category/outlet-store/":
         email_sender = 'codeguysean@gmail.com'
-        email_password = os.getenv('python_gmail_password')
-        # email_password = os.environ["GMAIL_PWD"]
+        # email_password = os.getenv('python_gmail_password')
+        email_password = os.environ["GMAIL_PWD"]
         email_receiver = 'seanbeanli@gmail.com'
         smtp_server = 'smtp.gmail.com'
         port = 465
