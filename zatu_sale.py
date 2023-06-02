@@ -19,7 +19,8 @@ def scrape_games(base_url):
     page = 1
     last_page = 0
     found_game = 0
-    # counter = 0
+    counter = 0
+    found_list = []
     while int(page) > int(last_page):
         url = "?page="
         response = requests.get(f"{base_url}{url}{page}")
@@ -57,13 +58,13 @@ def scrape_games(base_url):
         page = next_btn[-1].find("a")["data-page"] if next_btn else None
         # print(page)
         sleep(5)
-        # counter += 1
-        # if counter == 3:
-        #     break
+        counter += 1
+        if counter == 3:
+            break
 
     # print(found_list)
     # print(all_games)
-    send_email(found_game, found_list)
+    send_email(found_game, found_list, base_url)
 
 
 def get_product_id(game):
@@ -92,12 +93,11 @@ def find_wish_game(wish_list, game):
             found_list.append(wish_list_game)
     return found_list
 
-def send_email(found_game, found_list):
-    if found_game == 1:
+def send_email(found_game, found_list, base_url):
+    if found_game == 1 and base_url == "https://www.board-game.co.uk/category/outlet-store/":
         email_sender = 'codeguysean@gmail.com'
-        # email_password = os.getenv('python_gmail_password')
-        email_password = os.environ["GMAIL_PWD"]
-        print(email_password)
+        email_password = os.getenv('python_gmail_password')
+        # email_password = os.environ["GMAIL_PWD"]
         email_receiver = 'seanbeanli@gmail.com'
         smtp_server = 'smtp.gmail.com'
         port = 465
@@ -125,10 +125,43 @@ def send_email(found_game, found_list):
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
             server.login(email_sender, email_password)
             server.sendmail(email_sender, email_receiver, em.as_string())
+
+    elif found_game == 1 and base_url == "https://www.board-game.co.uk/buy/sale/":
+        email_sender = 'codeguysean@gmail.com'
+        # email_password = os.getenv('python_gmail_password')
+        email_password = os.environ["GMAIL_PWD"]
+        email_receiver = 'seanbeanli@gmail.com'
+        smtp_server = 'smtp.gmail.com'
+        port = 465
+
+        items = ["\nID: {id}\nName: {name}\nPrice: {price}\nRRP: {rrp}\nLink: {link}\n\n".format(id = found_list_game[0], name = found_list_game[1], price = found_list_game[2], rrp = found_list_game[3], link = found_list_game[4]) for found_list_game in found_list]
+        items = "".join(items)
+
+        subject = 'Wish list games found in Zatu Games Sale'
+        body = """
+        Found games details:
+
+        {0}
+
+        """.format(items)
+
+        em = EmailMessage()
+        em['From'] = email_sender
+        em['To'] = email_receiver
+        em['Subject'] = subject
+        em.set_content(body)
+
+        context = ssl.create_default_context()
+
+
+        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            server.login(email_sender, email_password)
+            server.sendmail(email_sender, email_receiver, em.as_string())
     else:
         return print("No game is found.")
 
 # scrape_games("https://www.board-game.co.uk/board-game-top-20-chart/")
 # scrape_games("https://www.board-game.co.uk/category/board-games/?popular=best-sellers")
-# scrape_games("https://www.board-game.co.uk/category/outlet-store/")
-scrape_games("https://www.board-game.co.uk/buy/sale")
+# scrape_games("https://www.board-game.co.uk/category/outlet-store/")https://www.board-game.co.uk/product/orichalcum/
+scrape_games("https://www.board-game.co.uk/category/outlet-store/")
+scrape_games("https://www.board-game.co.uk/buy/sale/")

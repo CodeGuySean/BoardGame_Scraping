@@ -1,4 +1,4 @@
-name: run zatu.py
+name: run zatu_sale.py
 
 on:
   schedule:
@@ -25,7 +25,7 @@ jobs:
       - name: execute py script # run main.py
         env:
           GMAIL_PWD: ${{ secrets.GMAIL_PWD }}
-        run: python zatu.py
+        run: python zatu_sale.py
           
       # - name: commit files
       #   run: |
