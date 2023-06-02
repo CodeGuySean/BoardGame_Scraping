@@ -13,12 +13,12 @@ my_file = open("wish_list.txt", "r")
 my_file_data = my_file.read()
 wish_list = my_file_data.split("\n")
 my_file.close()
-found_game = 0
 # print(wish_list)
 
 def scrape_games(base_url):
     page = 1
     last_page = 0
+    found_game = 0
     # counter = 0
     while int(page) > int(last_page):
         url = "?page="
@@ -59,7 +59,7 @@ def scrape_games(base_url):
         sleep(5)
         # counter += 1
         # if counter == 3:
-        # 	break
+        #     break
 
     # print(found_list)
     # print(all_games)
@@ -94,7 +94,7 @@ def find_wish_game(wish_list, game):
 
 def send_email(found_game, found_list):
     if found_game == 1:
-        email_sender = 'seanbeanli@gmail.com'
+        email_sender = 'codeguysean@gmail.com'
         # email_password = os.getenv('python_gmail_password')
         email_password = os.environ["GMAIL_PWD"]
         print(email_password)
