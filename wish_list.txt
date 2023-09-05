@@ -1,14 +1,13 @@
 Codenames
 Captain Sonar
-Sonar
 Salem
 Bristol
 Deadwood
 Tortuga
-MIND MGMT THE PSYCHIC ESPIONAGE GAME
+MIND MGMT
 Decrypto
 HUMAN PUNISHMENT SOCIAL DEDUCTION
-HUMAN PUNISHMENT PROJECT – HELL GATE
+HUMAN PUNISHMENT PROJECT HELL GATE
 Nemesis
 Battlestar Galactica
 Love Letter
@@ -21,4 +20,10 @@ Dead by Daylight
 Unfathomable
 DUNE IMPERIUM
 TOO MANY BONES
-DETECTIVE: CITY OF ANGELS
+DETECTIVE CITY OF ANGELS
+Campaign Trail
+Hegemony
+Keep The Heroes Out
+Lords of Waterdeep
+Lost Ruins Of Arnak
+Star War Imperial Assault
