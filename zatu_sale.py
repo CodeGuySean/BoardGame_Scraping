@@ -32,11 +32,13 @@ def scrape_games(base_url):
             # title = game.find("h2").find("a")["title"]
             # price = float(game.find("div", class_="zg-price-box-now")["data-now"])
 
-            found_list_temp = find_wish_game(wish_list, get_title(game))
-            for found_list_temp_item in found_list_temp:
+            #found_list_temp = find_wish_game(wish_list, get_title(game))
+            found_game = find_wish_game(wish_list, get_title(game))
+            #for found_list_temp_item in found_list_temp:
+            if found_game == 1:
                 found_game_data = get_product_id(game), get_title(game), get_price(game), get_rrp_price(game), get_link(game)
                 found_list.append(found_game_data)
-                found_game = 1
+                # found_game = 1
 
 
             game_data = (get_product_id(game), get_title(game), get_price(game), get_rrp_price(game))
@@ -87,17 +89,23 @@ def get_link(game):
     return game.find("a", class_="zg-product-image")["href"]
 
 def find_wish_game(wish_list, game):
-    found_list = []
+    #found_list = []
+    found_game = 0
     for wish_list_game in wish_list:
-        if wish_list_game in game:
-            found_list.append(wish_list_game)
-    return found_list
+        ## The first part is to check if the wish game name is in the retail game name on word basis
+        ## The second part is in case the retail game name is with a colon
+        if f" {wish_list_game.lower()} " in f" {game.lower()} " or f" {wish_list_game.lower()}:" in f" {game.lower()} ":
+            if 'insert' not in game.lower():
+                found_list.append(wish_list_game)
+                found_game = 1
+    return found_game
+    #return found_list
 
 def send_email(found_game, found_list, base_url):
-    if found_game == 1 and base_url == "https://www.board-game.co.uk/category/outlet-store/":
+    if found_game == 1:
         email_sender = 'codeguysean@gmail.com'
-        # email_password = os.getenv('python_gmail_password')
-        email_password = os.environ["GMAIL_PWD"]
+        email_password = os.getenv('python_gmail_password')
+        #email_password = os.environ["GMAIL_PWD"]
         email_receiver = 'seanbeanli@gmail.com'
         smtp_server = 'smtp.gmail.com'
         port = 465
@@ -105,7 +113,13 @@ def send_email(found_game, found_list, base_url):
         items = ["\nID: {id}\nName: {name}\nPrice: {price}\nRRP: {rrp}\nLink: {link}\n\n".format(id = found_list_game[0], name = found_list_game[1], price = found_list_game[2], rrp = found_list_game[3], link = found_list_game[4]) for found_list_game in found_list]
         items = "".join(items)
 
-        subject = 'Wish list games found in Zatu Games Outlet'
+        if base_url == "https://www.board-game.co.uk/category/outlet-store/":
+            subject = 'Wish list games found in Zatu Games Outlet'
+        elif base_url == "https://www.board-game.co.uk/buy/sale/":
+            subject = 'Wish list games found in Zatu Games Sale'
+        else:
+            subject = 'Wish List games found'
+
         body = """
         Found games details:
 
@@ -125,38 +139,7 @@ def send_email(found_game, found_list, base_url):
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
             server.login(email_sender, email_password)
             server.sendmail(email_sender, email_receiver, em.as_string())
-
-    elif found_game == 1 and base_url == "https://www.board-game.co.uk/buy/sale/":
-        email_sender = 'codeguysean@gmail.com'
-        # email_password = os.getenv('python_gmail_password')
-        email_password = os.environ["GMAIL_PWD"]
-        email_receiver = 'seanbeanli@gmail.com'
-        smtp_server = 'smtp.gmail.com'
-        port = 465
-
-        items = ["\nID: {id}\nName: {name}\nPrice: {price}\nRRP: {rrp}\nLink: {link}\n\n".format(id = found_list_game[0], name = found_list_game[1], price = found_list_game[2], rrp = found_list_game[3], link = found_list_game[4]) for found_list_game in found_list]
-        items = "".join(items)
-
-        subject = 'Wish list games found in Zatu Games Sale'
-        body = """
-        Found games details:
-
-        {0}
-
-        """.format(items)
-
-        em = EmailMessage()
-        em['From'] = email_sender
-        em['To'] = email_receiver
-        em['Subject'] = subject
-        em.set_content(body)
-
-        context = ssl.create_default_context()
-
-
-        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-            server.login(email_sender, email_password)
-            server.sendmail(email_sender, email_receiver, em.as_string())
+            
     else:
         return print("No game is found.")
 
