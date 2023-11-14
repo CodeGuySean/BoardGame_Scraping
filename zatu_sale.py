@@ -55,7 +55,7 @@ def scrape_games(base_url):
         next_btn = soup.find_all(lambda tag: tag.name == 'li' and tag.get('class') == ['auto'])
         page = next_btn[-1].find("a")["data-page"] if next_btn else None
         # print(page)
-        sleep(7)
+        sleep(4)
         # counter += 1
         # if counter == 3:
         #     break
