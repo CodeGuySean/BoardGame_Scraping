@@ -18,11 +18,13 @@ content = ""
 
 def scrape_games(base_url):
     page = 1
-    last_page = 0
+    # last_page = 0
+    stop = 0
     game_was_found = 0
     # counter = 0
     found_game_list = []
-    while int(page) > int(last_page):
+    # while int(page) > int(last_page):
+    while stop != 1:
         url = "?page="
         response = requests.get(f"{base_url}{url}{page}")
         print(f"Now scraping {base_url}{url}{page}...")
@@ -51,14 +53,27 @@ def scrape_games(base_url):
             # 			Price: {get_price(game)}
             # 			RRP Price: {get_rrp_price(game)}
             # 			""")
-        last_page += 1
-        next_btn = soup.find_all(lambda tag: tag.name == 'li' and tag.get('class') == ['auto'])
-        page = next_btn[-1].find("a")["data-page"] if next_btn else None
+        # last_page += 1
+        # next_btn = soup.find_all(lambda tag: tag.name == 'li' and tag.get('class') == ['auto'])
+
+        ## Find the disabled button
+        disabled_btn = soup.find("li", class_="mobile-hidden auto disabled")
+
+        ## To check if the found disabled button is Next button
+        ## If yes, it means this is the last page, so put a stop sign
+        if disabled_btn:
+            next_btn = disabled_btn.findChildren()
+            for child in next_btn:
+                # print(child.text)
+                # print("----")
+                if(child.text == "Next"):
+                    stop = 1
+
+
+        page += 1
+        # page = next_btn[-1].find("a")["data-page"] if next_btn else 0
         # print(page)
         sleep(4)
-        # counter += 1
-        # if counter == 3:
-        #     break
 
     # print(found_list)
     # print(all_games)
@@ -130,8 +145,8 @@ def send_email(content):
         return
     
     email_sender = 'codeguysean@gmail.com'
-    # email_password = os.getenv('python_gmail_password')
-    email_password = os.environ["GMAIL_PWD"]
+    email_password = os.getenv('python_gmail_password')
+    # email_password = os.environ["GMAIL_PWD"]
     email_receiver = 'seanbeanli@gmail.com'
     smtp_server = 'smtp.gmail.com'
     port = 465
@@ -173,9 +188,6 @@ def send_email(content):
     # else:
     #     return print("No game is found.")
 
-# scrape_games("https://www.board-game.co.uk/board-game-top-20-chart/")
-# scrape_games("https://www.board-game.co.uk/category/board-games/?popular=best-sellers")
-# scrape_games("https://www.board-game.co.uk/category/outlet-store/")https://www.board-game.co.uk/product/orichalcum/
 setup_email(scrape_games("https://www.board-game.co.uk/category/outlet-store/"), "outlet")
 setup_email(scrape_games("https://www.board-game.co.uk/buy/sale/"), "sale")
 send_email(content)
