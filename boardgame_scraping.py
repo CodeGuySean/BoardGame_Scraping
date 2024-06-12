@@ -22,7 +22,7 @@ my_file.close()
 # found_list = []
 content = ""
 
-def scrape_games(base_url):
+def scrape_games(base_url, query_strings):
     page = 1
     # last_page = 0
     stop = 0
@@ -32,8 +32,8 @@ def scrape_games(base_url):
     # while int(page) > int(last_page):
     while stop != 1:
         url = "?page="
-        response = requests.get(f"{base_url}{url}{page}")
-        print(f"Now scraping {base_url}{url}{page}...")
+        response = requests.get(f"{base_url}{url}{page}{query_strings}")
+        print(f"Now scraping {base_url}{url}{page}{query_strings}...")
         soup = BeautifulSoup(response.text, "html.parser")
         games = soup.find_all("li", class_="zg-product")
         
@@ -85,7 +85,6 @@ def scrape_games(base_url):
     
     return found_game_list
 
-#  ==================================        TO  DO =========================================
 def scrape_games_chaos(base_URL):
 
     s = Service(ChromeDriverManager().install())
@@ -139,7 +138,6 @@ def scrape_games_chaos(base_URL):
     # print(f"\n\nChaos found game list = {found_game_list}")
 
     return found_game_list
-#  ========================================================================================
 
 def get_product_id(game):
     return int(game["data-product-id"])
@@ -238,8 +236,8 @@ def send_email(content):
         return
     
     email_sender = 'codeguysean@gmail.com'
-    # email_password = os.getenv('python_gmail_password')
-    email_password = os.environ["GMAIL_PWD"]
+    email_password = os.getenv('python_gmail_password')
+    # email_password = os.environ["GMAIL_PWD"]
     email_receiver = 'seanbeanli@gmail.com'
     smtp_server = 'smtp.gmail.com'
     port = 465
@@ -281,8 +279,9 @@ def send_email(content):
     # else:
     #     return print("No game is found.")
 
-setup_email(scrape_games("https://www.board-game.co.uk/category/outlet-store/"), "zatu_outlet")
-setup_email(scrape_games("https://www.board-game.co.uk/buy/sale/"), "zatu_sale")
+# setup_email(scrape_games("https://www.board-game.co.uk/category/outlet-store/"), "zatu_outlet")
+setup_email(scrape_games("https://www.board-game.co.uk/buy/outlet-board-games/", "&oos=hide"), "zatu_outlet")
+setup_email(scrape_games("https://www.board-game.co.uk/buy/sale/", "&category=board-games"), "zatu_sale")
 setup_email(scrape_games_chaos("https://www.chaoscards.co.uk/shop/damaged-items"), "chaos_damaged_items")
 setup_email(scrape_games_chaos("https://www.chaoscards.co.uk/shop/clearance/sort/newly-listed/sale-category/board-games"), "chaos_clearance")
 send_email(content)

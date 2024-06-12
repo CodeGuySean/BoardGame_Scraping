@@ -3,7 +3,6 @@ Mage Knight
 Dead by Daylight
 TOO MANY BONES
 DETECTIVE CITY OF ANGELS
-Keep The Heroes Out
 Lost Ruins Of Arnak
 Blood on the clocktower
 ANCIENT FOREST
@@ -13,3 +12,4 @@ Night of the ninja
 Wizard
 The Crew Mission Deep Sea
 Primal
+Sheriff of Nottingham
