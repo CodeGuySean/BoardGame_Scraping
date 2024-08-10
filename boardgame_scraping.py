@@ -87,7 +87,9 @@ def scrape_games(base_url, query_strings):
 
 def scrape_games_chaos(base_URL):
 
-    s = Service(ChromeDriverManager().install())
+    # The ChromeDriverManager didn't work since 10 Aug 2024, could be an issue from the official webdriver software
+    # s = Service(ChromeDriverManager().install())
+    s = Service("C:\\Windows\\System32\\chromedriver.exe")
     chrome_options = Options()
     chrome_options.add_argument("-headless")
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -236,8 +238,13 @@ def send_email(content):
         return
     
     email_sender = 'codeguysean@gmail.com'
+
+    # Testing environment
     # email_password = os.getenv('python_gmail_password')
+
+    # Live environment
     email_password = os.environ["GMAIL_PWD"]
+    
     email_receiver = 'seanbeanli@gmail.com'
     smtp_server = 'smtp.gmail.com'
     port = 465
@@ -280,8 +287,8 @@ def send_email(content):
     #     return print("No game is found.")
 
 # setup_email(scrape_games("https://www.board-game.co.uk/category/outlet-store/"), "zatu_outlet")
-setup_email(scrape_games("https://www.board-game.co.uk/buy/outlet-board-games/", "&oos=hide"), "zatu_outlet")
-setup_email(scrape_games("https://www.board-game.co.uk/buy/sale/", "&category=board-games"), "zatu_sale")
-setup_email(scrape_games_chaos("https://www.chaoscards.co.uk/shop/damaged-items"), "chaos_damaged_items")
+# setup_email(scrape_games("https://www.board-game.co.uk/buy/outlet-board-games/", "&oos=hide"), "zatu_outlet")
+# setup_email(scrape_games("https://www.board-game.co.uk/buy/sale/", "&category=board-games"), "zatu_sale")
+# setup_email(scrape_games_chaos("https://www.chaoscards.co.uk/shop/damaged-items"), "chaos_damaged_items")
 setup_email(scrape_games_chaos("https://www.chaoscards.co.uk/shop/clearance/sort/newly-listed/sale-category/board-games"), "chaos_clearance")
 send_email(content)
